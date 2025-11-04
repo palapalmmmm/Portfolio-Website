@@ -1,0 +1,22 @@
+{
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": "Portfolio Website",
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/Portfolio_Website.html"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/images/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/Portfolio_Website.html",
+      "status": 404
+    }
+  ]
+}
