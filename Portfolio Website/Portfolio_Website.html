@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/customer_user_icon_261455.png">
+    <title>Pongsathorn K. - Portfolio</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font family -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* Hide scrollbar but allow scrolling for a cleaner look */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .section-padding {
+            padding: 5rem 0; /* Consistent vertical padding */
+            display: flex;
+            align-items: flex-start; /* Aligns content to the top of the padding box */
+        }
+        /* Home section retains full height and center alignment */
+        #home {
+            min-height: calc(100vh - 4rem);
+            align-items: center; 
+        }
+        @media (max-width: 640px) {
+             .section-padding {
+                padding: 4rem 0;
+            }
+        }
+        /* Custom class for the image container to ensure it maintains aspect ratio */
+        .image-container {
+            position: relative;
+            padding-top: 120%; /* Adjusted aspect ratio (taller rectangle) */
+            width: 100%;
+        }
+        .image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Use cover to fill the container, or contain to ensure the whole image is visible */
+            object-fit: cover; 
+        }
+        
+        /* --- 2. & 3. Custom Text Size Variables for Easy Adjustments --- */
+        :root {
+            /* Adjust the size of the main headline here (text-6xl, sm:text-7xl, lg:text-8xl) */
+            --hero-text-size: 3.5rem; /* Equivalent to text-8xl */
+            /* Adjust the size of the summary paragraph here (text-3xl) */
+            --summary-text-size: 1.16rem; /* Equivalent to text-3xl */
+        }
+
+        .hero-headline {
+            font-size: var(--hero-text-size);
+        }
+        .summary-paragraph {
+             font-size: var(--summary-text-size);
+        }
+
+        /* Responsive adjustments for headline */
+        @media (min-width: 640px) { /* sm */
+             .hero-headline { font-size: 4.5rem; } /* roughly text-7xl */
+        }
+        @media (min-width: 1024px) { /* lg */
+             .hero-headline { font-size: var(--hero-text-size); } 
+        }
+
+        /* Specific style for certificate zoom modal */
+        #cert-image-container {
+            max-width: 90%;
+            max-height: 90vh;
+        }
+        #cert-image-container img {
+             /* Make sure the zoomed image fits the modal window nicely */
+            object-fit: contain;
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            max-height: 100%;
+        }
+
+        /* Custom style for the digital badge button*/
+        .badge-button {
+            display: inline-flex; /* Use flex for centering */
+            align-items: center;
+            justify-content: center;
+            /* Explicitly set the size for the link container to match the image size (approx 64px) */
+            width: 4rem; /* 64px */
+            height: 4rem; /* 64px */
+            
+            /* Remove unnecessary styling */
+            padding: 0; 
+            box-shadow: none; 
+            border: none;
+            
+            /* Combine transitions for both scale and background color */
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            cursor: pointer; 
+        }
+        
+        /* Hover effect (subtle scale only) */
+        .badge-button:hover {
+            transform: scale(1.05); 
+        }
+
+        /* Styles for the image inside the button: will take up 100% of the container (64px x 64px) */
+        .badge-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Ensure the image itself doesn't have a border or shadow */
+            box-shadow: none;
+            border: none;
+        }
+
+    </style>
+</head>
+
+<!-- 1. Default to Light Theme -->
+<body class="antialiased" data-theme="light">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-md border-b border-gray-200 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Title uses theme-text-header for dynamic color -->
+            <h1 class="text-xl font-bold tracking-tight text-gray-900 transition-colors duration-300 theme-text-header">P O R T F O L I O</h1>
+            <nav class="space-x-6 text-sm font-medium flex items-center">
+                <a href="#home" class="hover:text-black transition-colors text-gray-500 nav-link">Home</a>
+                <a href="#about" class="hover:text-black transition-colors text-gray-500 nav-link">About</a>
+                <a href="#projects" class="hover:text-black transition-colors text-gray-500 nav-link">Projects</a>
+                <a href="#certificates" class="hover:text-black transition-colors text-gray-500 nav-link">Certificates</a>
+                 <!-- Theme Toggle Button -->
+                <button id="theme-toggle" onclick="toggleTheme()" class="p-2 ml-4 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors duration-300">
+                    <!-- Moon Icon (Hidden initially in light mode) -->
+                    <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white transition-colors duration-300 hidden"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    <!-- Sun Icon (Default: Visible in light mode) -->
+                    <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black transition-colors duration-300"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- 1. Home Section: MODIFIED FOR FIXED SIDE-BY-SIDE LAYOUT -->
+        <section id="home" class="section-padding pt-24">
+            <!-- Use grid-cols-12 on ALL sizes (default) for a fixed side-by-side split -->
+            <div class="grid grid-cols-12 items-center w-full gap-8 md:gap-12 lg:gap-16">
+                
+                <!-- Column 1: Text Content (Takes 12 columns on tiny screens, 8 on small, 8 on medium/large) -->
+                <div class="col-span-12 sm:col-span-8 w-full flex flex-col space-y-8 max-w-4xl">
+                    <!--<p class="text-lg font-medium tracking-wider text-gray-600 theme-text-secondary">Data Analyst</p>-->
+                    <!-- 2. Applied custom class for dynamic size control -->
+                    <h2 class="hero-headline font-extrabold tracking-tighter leading-none text-gray-900 theme-text-primary text-5xl">
+                        Hi, I'm Pongsathorn Kaewkrajang <br><span class="text-gray-600 theme-text-secondary text-5xl"><br>— a passionate Data Analyst</span>
+                        <br><span class="text-gray-900 theme-text-primary text-5xl">who loves turning data into insights.</span>
+                    </h2>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-12 pt-6 text-lg">
+                        <div class="flex items-center space-x-3">
+                            <!-- Mock Icon: Mail -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-500 theme-icon-contact"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 7 9-7"/></svg>
+                            <a href="mailto:pongsathorn.kkj@gmail.com" class="text-gray-700 hover:text-black transition-colors duration-300 theme-text-contact">pongsathorn.kkj@gmail.com</a>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <!-- Mock Icon: Phone -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-500 theme-icon-contact"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-5.3-5.3A19.79 19.79 0 0 1 2 4.18 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span class="text-gray-700 theme-text-contact">098-250-8754</span>
+                        </div>
+                    </div>
+
+                    <!-- Digital Badge Button (Image used instead of SVG) -->
+                    <div class="pt-6">
+                        <a href="https://badgr.com/public/assertions/olSsUlVGRpiLBnlaSd0IEQ?identity__email=master.palmmie2002@gmail.com" target="_blank" rel="noopener noreferrer" 
+                           id="badge-link"
+                           class="badge-button theme-card theme-hover rounded-full" 
+                           title="View Digital Badge">
+                            <img id="badge-image" 
+                                 src="images/DataRockie School - Certified Professional Data Analyst - 2025-05-12.png" 
+                                 alt="Digital Badge" 
+                                 class="w-full h-full object-contain"
+                            />
+                        </a>
+                        <p class="text-sm text-gray-500 theme-text-muted mt-2">View Digital Badge</p>
+                    </div>
+                </div>
+
+                <!-- Column 2: Image Placeholder (Hidden on tiny screens, takes 4 columns on small/medium/large) -->
+                <!-- <div class="hidden sm:block sm:col-span-4 w-full flex justify-center lg:justify-end">
+                    <div class="image-container md:max-w-xs lg:max-w-full lg:h-full lg:mt-0">
+                        <img 
+                            src="image_b4fd3d.png" 
+                            class="rounded-3xl shadow-2xl transition-opacity duration-500"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x500/f3f4f6/111827?text=Your+Image+Here';"
+                        >
+                    </div>
+                </div>-->
+
+            </div>
+            
+            <!-- Fallback Image for Tiny Screens -->
+            <div class="sm:hidden w-full flex justify-center mt-12">
+                 <div class="image-container max-w-xs">
+                    <img 
+                        src="YOUR_IMAGE_URL_HERE" 
+                        class="rounded-3xl shadow-2xl transition-opacity duration-500"
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x500/f3f4f6/111827?text=Your+Image+Here';"
+                    >
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. About Section -->
+        <section id="about" class="section-padding">
+            <div class="w-full">
+                <h3 class="text-4xl font-bold tracking-tight mb-12 border-b border-gray-300 theme-border-main pb-4 theme-text-primary">About</h3>
+
+                <!-- Summary -->
+                <div class="mb-16">
+                    <!-- 3. Applied custom class for dynamic size control -->
+                    <p class="summary-paragraph font-light leading-relaxed text-gray-800 theme-text-summary text-justify">
+                        I'm a fresh graduate in computer science with a strong passionate for working of data analytics and a high motivation for learning in this field. I enjoy finding and analyzing data to find patterns and insights using SQL, Python, and Excel and then applying those findings to create value and improve things. I also love using data visualization to tell clear, meaningful stories. What excites me most is using what I discover from data to create actionable strategies and improvement.
+                    </p>
+                </div>
+
+                <!-- 4. Removed horizontal dividers for a cleaner stacked look -->
+                <div class="grid grid-cols-1 gap-12 lg:grid-cols-1">
+                    
+                    <!-- 4a. Experience (First) -->
+                    <div class="pt-6 lg:pt-0">
+                        <h4 class="text-2xl font-semibold mb-6 text-gray-900 theme-text-primary">Experience</h4>
+                        <div class="space-y-6 lg:flex lg:flex-col lg:space-y-8">
+                            <div class="border-l-2 border-gray-400 theme-border-detail pl-4">
+                                <p class="text-xl font-medium text-gray-900 theme-text-primary">Trainee Data Science</p>
+                                <p class="text-base text-gray-700 theme-text-detail">IBOTNOI Company Limited, Bangkok | January 2025 - May 2025</p>
+                                <br>
+                                <ul class="list-disc pl-6 text-base text-gray-500 mt-1 theme-text-muted space-y-3">
+                                    <li>Analyzed price elasticity with external partners, using the outputs to evaluate the impact of pricing changes on customer behavior and company revenue, helping guide marketing and product strategies.</li>
+                                    <li>Extracted data of over 4,000 customers from a Customer Data Platform (CDP) to created customer profiles and analyzed by using Python.</li>
+                                    <li>Used K-means clustering technique to segment customers into 30 groups and analyzing their behavior patterns.</li>
+                                    <li>Created data visualizations and presented the key insights to cross-functional teams to support data-driven decision making.</li>
+                                    <li>Identified factors driving customer behavior beyond pricing and estimated the revenue impact of various price changes.</li>
+                                    <li>Researched in-depth and demonstrate Experiment Tracking with MLflow and Hyperparameter Optimization with Optuna for Machine learning through a knowledge-sharing session with slides and code examples to support other teams' projects.</li>
+                                    <li>Developed a model to predict the commission rate of new employees during their probation period.</li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 4b. Skills (Second) -->
+                    <div class="pt-12">
+                        <h4 class="text-2xl font-semibold mb-6 text-gray-900 theme-text-primary">Skills</h4>
+                        <div class="space-y-3">
+                            <p class="text-lg text-gray-700 theme-text-detail"><strong class="text-gray-900 theme-text-primary">Programming Languages - </strong>Python (Pandas, Numpy, Matplotlib), SQL (SQL Server, MySQL), R (Data Analysis, Visualization)</p>
+                            <p class="text-lg text-gray-700 theme-text-detail"><strong class="text-gray-900 theme-text-primary">Tools - </strong>Microsoft Power BI, Looker studio, Microsoft Excel (Pivot Table, Dashboard), Google Sheet</p>
+                            <p class="text-lg text-gray-700 theme-text-detail"><strong class="text-gray-900 theme-text-primary">Soft Skills - </strong>Analytical Thinking, Problem-solving, Curious Mindset, Proactivity</p>
+                            <p class="text-lg text-gray-700 theme-text-detail"><strong class="text-gray-900 theme-text-primary">Thai - </strong>Native</p>
+                            <p class="text-lg text-gray-700 theme-text-detail"><strong class="text-gray-900 theme-text-primary">English - </strong>Intermediate (Toeic 780/990)</p>
+                        </div>
+                    </div>
+
+                    <!-- 4c. Education (Third) -->
+                    <div class="pt-12">
+                        <h4 class="text-2xl font-semibold mb-6 text-gray-900 theme-text-primary">Education</h4>
+                        <div class="space-y-6">
+                            <div class="border-l-2 border-gray-400 theme-border-detail pl-4">
+                                <p class="text-xl font-medium text-gray-900 theme-text-primary">Bachelor of Science in Computer Science</p>
+                                <p class="text-base text-gray-700 theme-text-detail">Faculty of Information Technology and Innovation, Bangkok University | 2021 - 2025</p>
+                                <p class="text-base text-gray-500 mt-1 theme-text-muted">GPAX : 3.81 (First Class Honors)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Projects Section -->
+        <section id="projects" class="section-padding">
+            <div class="w-full">
+                <h3 class="text-4xl font-bold tracking-tight mb-12 border-b border-gray-300 theme-border-main pb-4 theme-text-primary">Projects</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Project 1 -->
+                    <div id="Data-Driven Insights into Coupon Usage in E-commerce" class="project-box bg-gray-100 p-8 rounded-3xl transition-all hover:bg-gray-200 cursor-pointer shadow-xl theme-card theme-hover"
+                        data-project='{"title": "Data-Driven Insights into Coupon Usage in E-commerce", "tech": ["SQL (SQLite)"], "details": "Analyzed coupon usage behavior using SQL and discovered that free shipping coupons were the most popular among all orders. Found that 64% of customers who used a coupon in their first purchase, returned and used a coupon again. Providing valuable insights to optimize coupon strategies that drive customer retention and repeat purchases."}'>
+                        <h4 class="text-2xl font-semibold mb-2 text-gray-900 theme-text-primary text-lg">Data-Driven Insights into Coupon Usage in E-commerce</h4>
+                        <p class="text-gray-700 mb-4 theme-text-detail">Analyze customer purchasing behavior on an e-commerce platform, with a specific focus on coupon usage during purchases.</p>
+                        <div>
+                            <a href="https://www.notion.so/Data-Driven-Insights-into-Coupon-Usage-in-E-commerce-29d74f552d2a807bab0bef2481209b06?source=copy_link"
+                            target="_blank"
+                            onclick="event.stopPropagation();"
+                            class="inline-block mt-2 bg-gray-600 text-white text-xs uppercase px-2 py-1.5 rounded-lg hover:bg-green-700 transition">
+                            click here to view full project
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div id="Analysis of Spending Behavior to Identify High-Customer Segments" class="project-box bg-gray-100 p-8 rounded-3xl transition-all hover:bg-gray-200 cursor-pointer shadow-xl theme-card theme-hover"
+                        data-project='{"title": "Analysis of Spending Behavior to Identify High-Customer Segments", "tech": ["SQL (SQLite)"], "details": "Analyzed customer spending behavior by segmenting customers into High and Low groups based on total spending. Although both groups were similar in size, the High group generated over 80% of total revenue, tended to purchase higher-priced. The Low group showed price-sensitive behavior, suggesting opportunities for discount or bundle promotions to increase sales."}'>
+                        <h4 class="text-2xl font-semibold mb-2 text-gray-900 theme-text-primary text-lg">Analysis of Spending Behavior to Identify High-Customer Segments</h4>
+                        <p class="text-gray-700 mb-4 theme-text-detail">Analyze customer spending behavior to identify high-value and potential growth segments.</p>
+                        <div>
+                            <a href="https://www.notion.so/Analysis-of-Customer-Spending-Behavior-to-Identify-High-Value-Segments-28e74f552d2a80a19f07e44e7bfebc7d?source=copy_link"
+                            target="_blank"
+                            onclick="event.stopPropagation();"
+                            class="inline-block mt-2 bg-gray-600 text-white text-xs uppercase px-2 py-1.5 rounded-lg hover:bg-green-700 transition">
+                            click here to view full project
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Certificates Section -->
+        <section id="certificates" class="section-padding">
+            <div class="w-full">
+                <h3 class="text-4xl font-bold tracking-tight mb-12 border-b border-gray-300 theme-border-main pb-4 theme-text-primary">Certificates</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <!-- Mock Certificate 1 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="Data Analyst Certificate"
+                        data-large-image-url="images/certificate_of_completion_data_analytics.png">
+                        <img src="images/certificate_of_completion_data_analytics.png" alt="Data Analyst Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">Data Analyst Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 2 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="Data Science Fundamentals Certificate"
+                        data-large-image-url="images/certificate_of_completion_data_science.png">
+                        <img src="images/certificate_of_completion_data_science.png" alt="Data Science Fundamentals Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">Data Science Fundamentals Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 3 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="Excel Certificate"
+                        data-large-image-url="images/certificate_of_completion_excel.png">
+                        <img src="images/certificate_of_completion_excel.png" alt="Excel Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">Excel Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 4 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="SQL Developer Certificate"
+                        data-large-image-url="images/certificate_of_completion_sql.png">
+                        <img src="images/certificate_of_completion_sql.png" alt="SQL Developer Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">SQL Developer Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 5 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="Statistical Data Analyst Certificate"
+                        data-large-image-url="images/certificate_of_completion_statistics.png">
+                        <img src="images/certificate_of_completion_statistics.png" alt="Statistical Data Analyst Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">Statistical Data Analyst Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 6 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="Python Developer Certificate"
+                        data-large-image-url="images/certificate_of_completion_python.png">
+                        <img src="images/certificate_of_completion_python.png" alt="Python Developer Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">Python Developer Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 7 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="Pandas Fundamentals Certificate"
+                        data-large-image-url="images/certificate_of_completion_pandas.png">
+                        <img src="images/certificate_of_completion_pandas.png" alt="Pandas Fundamentals Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">Pandas Fundamentals Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 8 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="Numpy Fundamentals Certificate"
+                        data-large-image-url="images/certificate_of_completion_numpy.png">
+                        <img src="images/certificate_of_completion_numpy.png" alt="Numpy Fundamentals Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">Numpy Fundamentals Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 9 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="SQL for Data Analytics Certificate"
+                        data-large-image-url="images/certificate-guided-project-sql-for-data-analytics_พงศธร.png">
+                        <img src="images/certificate-guided-project-sql-for-data-analytics_พงศธร.png" alt="SQL for Data Analytics Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">SQL for Data Analytics Certificate</p>
+                    </div>
+                    <!-- Mock Certificate 10 -->
+                    <div class="certificate-box p-4 bg-white rounded-xl shadow-lg theme-card-light hover:shadow-2xl transition-shadow cursor-pointer"
+                        data-title="Botnoi Trainee 2025 Certificate"
+                        data-large-image-url="images/certificate_botnoi_พงศธร แก้วกระจ่าง.png">
+                        <img src="images/certificate_botnoi_พงศธร แก้วกระจ่าง.png" alt="Botnoi Trainee 2025 Certificate" class="w-full h-auto rounded-lg object-cover border border-gray-200 theme-border-image">
+                        <p class="text-center text-sm mt-3 text-gray-700 font-medium theme-text-detail">Botnoi Trainee 2025 Certificate</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-20 py-8 border-t border-gray-300 theme-border-main">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500 theme-text-muted">
+            &copy; <span id="current-year"></span> Pongsathorn Kaewkrajang
+        </div>
+    </footer>
+
+
+    <!-- Project Detail Modal (Text content) -->
+    <div id="detail-modal" class="fixed inset-0 bg-white/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none theme-modal-overlay">
+        <div class="bg-gray-100 w-full max-w-2xl rounded-3xl p-8 shadow-2xl scale-95 transition-transform duration-300 transform-gpu theme-card" id="modal-content">
+            <div class="flex justify-between items-start mb-6">
+                <h3 id="modal-title" class="text-3xl font-extrabold text-gray-900 theme-text-primary">Detail Title</h3>
+                <button onclick="closeModal()" class="text-gray-700 hover:text-black transition-colors duration-300 p-2 -mr-2 theme-text-detail theme-hover-text">
+                    <!-- Close Icon (X) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <!-- Project Fields -->
+                <div id="modal-role-group">
+                    <!--<p class="text-sm font-medium uppercase text-gray-500 theme-text-muted">Role</p>-->
+                    <p id="modal-role" class="text-lg text-gray-800 font-semibold theme-text-summary"></p>
+                </div>
+                <div id="modal-tech-group">
+                    <p class="text-sm font-medium uppercase text-gray-500 theme-text-muted">Tool</p>
+                    <div id="modal-tech" class="flex flex-wrap gap-2 mt-2">
+                        <!-- Tech badges will be inserted here -->
+                    </div>
+                </div>
+                <!-- Shared Details Field -->
+                <div>
+                    <p class="text-sm font-medium uppercase text-gray-500 theme-text-muted">Description</p>
+                    <p id="modal-details" class="text-base text-gray-600 leading-relaxed theme-text-detail-sm"></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Zoom Modal (Image only) -->
+    <div id="zoom-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[110] flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <!-- Close Button: Moved outside the image container to ensure fixed position relative to the screen/modal edge -->
+        <button onclick="closeZoomModal()" class="absolute top-6 right-6 sm:top-8 sm:right-8 text-white hover:text-gray-300 transition-colors duration-300 p-3 rounded-full bg-black/50 hover:bg-black/70 z-20">
+            <!-- Close Icon (X) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+        
+        <div id="cert-image-container" class="relative flex items-center justify-center">
+            <img id="modal-zoom-image" src="" alt="Zoomed Certificate View" class="rounded-xl shadow-2xl transition-transform duration-300 scale-95 transform-gpu" />
+        </div>
+    </div>
+
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        const detailModal = document.getElementById('detail-modal');
+        const detailModalContent = document.getElementById('modal-content');
+        const zoomModal = document.getElementById('zoom-modal');
+        const zoomImage = document.getElementById('modal-zoom-image');
+        
+        const projectBoxes = document.querySelectorAll('.project-box');
+        const certificateBoxes = document.querySelectorAll('.certificate-box');
+
+        // References for modal groups
+        const roleGroup = document.getElementById('modal-role-group');
+        const techGroup = document.getElementById('modal-tech-group');
+
+
+        // Function to open the Project detail modal
+        function openDetailModal(projectData) {
+            
+            // Hide Zoom modal if open
+            closeZoomModal();
+            
+            // 1. Ensure project groups are visible
+            roleGroup.classList.remove('hidden');
+            techGroup.classList.remove('hidden');
+
+            // 2. Populate fields
+            document.getElementById('modal-title').textContent = projectData.title;
+            document.getElementById('modal-details').textContent = projectData.details;
+            document.getElementById('modal-role').textContent = projectData.role;
+            
+            const techContainer = document.getElementById('modal-tech');
+            techContainer.innerHTML = ''; // Clear previous badges
+            
+            // Re-render badges with theme classes
+            const isLight = document.body.getAttribute('data-theme') === 'light';
+            projectData.tech.forEach(tech => {
+                const badge = document.createElement('span');
+                // Apply theme-specific badge classes
+                const darkClasses = 'px-3 py-1 bg-gray-700 text-xs font-medium text-white rounded-full';
+                const lightClasses = 'px-3 py-1 bg-gray-300 text-xs font-medium text-gray-900 rounded-full';
+
+                badge.className = isLight ? lightClasses : darkClasses;
+                badge.textContent = tech;
+                techContainer.appendChild(badge);
+            });
+
+            // 3. Show modal with transition effects
+            detailModal.classList.remove('opacity-0', 'pointer-events-none');
+            detailModalContent.classList.remove('scale-95');
+            detailModalContent.classList.add('scale-100');
+        }
+
+        // Function to open the Certificate Zoom modal
+        function openZoomModal(imageUrl, title) {
+            // Hide Detail modal if open
+            closeDetailModal();
+
+            zoomImage.src = imageUrl;
+            zoomImage.alt = title;
+            
+            // Show modal with transition effects
+            zoomModal.classList.remove('opacity-0', 'pointer-events-none');
+            
+            // Delay scale transform slightly to catch the transition
+            setTimeout(() => {
+                zoomImage.classList.remove('scale-95');
+                zoomImage.classList.add('scale-100');
+            }, 10); 
+        }
+
+        // Function to close the Project detail modal
+        function closeDetailModal() {
+            // Hide modal with transition effects
+            detailModalContent.classList.remove('scale-100');
+            detailModalContent.classList.add('scale-95');
+            detailModal.classList.add('opacity-0');
+            setTimeout(() => {
+                detailModal.classList.add('pointer-events-none');
+            }, 300);
+        }
+
+        // Function to close the Certificate Zoom modal
+        function closeZoomModal() {
+            // Hide modal with transition effects
+            zoomImage.classList.remove('scale-100');
+            zoomImage.classList.add('scale-95');
+            zoomModal.classList.add('opacity-0');
+            setTimeout(() => {
+                zoomModal.classList.add('pointer-events-none');
+            }, 300);
+        }
+
+        // Expose close functions globally for buttons
+        window.closeModal = closeDetailModal;
+        window.closeZoomModal = closeZoomModal;
+
+        // Attach event listeners to project boxes
+        projectBoxes.forEach(box => {
+            box.addEventListener('click', () => {
+                try {
+                    const projectJson = box.getAttribute('data-project');
+                    if (projectJson) {
+                        const projectData = JSON.parse(projectJson);
+                        openDetailModal(projectData);
+                    } else {
+                        console.error('Missing or invalid data-project attribute on project card:', box.id);
+                    }
+                } catch (e) {
+                    console.error('Error parsing project data:', e);
+                }
+            });
+        });
+        
+        // Attach event listeners to certificate boxes (Image Zoom)
+        certificateBoxes.forEach(box => {
+            box.addEventListener('click', () => {
+                const imageUrl = box.getAttribute('data-large-image-url');
+                const title = box.getAttribute('data-title');
+                if (imageUrl) {
+                    openZoomModal(imageUrl, title);
+                } else {
+                     console.error('Missing data-large-image-url on certificate card:', title);
+                }
+            });
+        });
+
+
+        // Close modals when clicking outside of the content area
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) {
+                closeDetailModal();
+            }
+        });
+        zoomModal.addEventListener('click', (e) => {
+            // Check if the click target is the overlay itself, not the image or button
+            if (e.target === zoomModal || e.target === document.getElementById('cert-image-container')) {
+                closeZoomModal();
+            }
+        });
+
+
+        // Close modals on escape key press
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (!detailModal.classList.contains('opacity-0')) {
+                    closeDetailModal();
+                }
+                if (!zoomModal.classList.contains('opacity-0')) {
+                    closeZoomModal();
+                }
+            }
+        });
+
+        // --- Theme Toggling Logic ---
+
+        const body = document.body;
+        const header = document.querySelector('header');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const themeIconMoon = document.getElementById('theme-icon-moon');
+        const themeIconSun = document.getElementById('theme-icon-sun');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        const selectors = {
+            // Header title text
+            'theme-text-header': { dark: ['text-white'], light: ['text-gray-900'] },
+            // Main text/titles
+            'theme-text-primary': { dark: ['text-white'], light: ['text-gray-900'] },
+            // Secondary text/details
+            'theme-text-secondary': { dark: ['text-gray-400'], light: ['text-gray-600'] },
+            // Tertiary/muted text
+            'theme-text-muted': { dark: ['text-gray-500'], light: ['text-gray-500'] },
+            // Summary text (slightly lighter than primary)
+            'theme-text-summary': { dark: ['text-gray-300'], light: ['text-gray-800'] },
+            // Contact links
+            'theme-text-contact': { dark: ['text-gray-300', 'hover:text-white'], light: ['text-gray-700', 'hover:text-black'] },
+            // Detail text in cards
+            'theme-text-detail': { dark: ['text-gray-400'], light: ['text-gray-700'] },
+            // Detail text in modal
+            'theme-text-detail-sm': { dark: ['text-gray-400'], light: ['text-gray-600'] },
+            // Card backgrounds
+            'theme-card': { dark: ['bg-gray-900'], light: ['bg-gray-100'] },
+            'theme-card-light': { dark: ['bg-gray-900'], light: ['bg-white'] }, // Used for certificate containers
+            // Project hover effect
+            'theme-hover': { dark: ['hover:bg-gray-800'], light: ['hover:bg-gray-200'] },
+            // Main section dividers/borders
+            'theme-border-main': { dark: ['border-gray-800'], light: ['border-gray-300'] },
+            // Detail borders (experience/education lines)
+            'theme-border-detail': { dark: ['border-gray-800'], light: ['border-gray-400'] },
+            // Certificate image borders
+            'theme-border-image': { dark: ['border-gray-800'], light: ['border-gray-200'] },
+            // Modal Overlay
+            'theme-modal-overlay': { dark: ['bg-black/90'], light: ['bg-white/90'] }
+            
+            // NOTE: theme-border-main-y was removed as requested.
+        };
+
+        function applyTheme(theme) {
+            const isLight = theme === 'light';
+            
+            // 1. BODY background/text (Base colors)
+            body.classList.toggle('bg-white', isLight);
+            body.classList.toggle('text-gray-900', isLight);
+            body.classList.toggle('bg-black', !isLight);
+            body.classList.toggle('text-gray-100', !isLight);
+
+            // 2. HEADER
+            header.classList.toggle('bg-white/80', isLight);
+            header.classList.toggle('border-gray-200', isLight);
+            header.classList.toggle('shadow-md', isLight);
+            header.classList.toggle('bg-black/80', !isLight);
+            header.classList.toggle('border-gray-800', !isLight);
+            header.classList.toggle('shadow-lg', !isLight);
+
+            // 3. Theme Toggle Button
+            themeToggleBtn.classList.toggle('bg-gray-200', isLight);
+            themeToggleBtn.classList.toggle('hover:bg-gray-300', isLight);
+            themeToggleBtn.classList.toggle('bg-gray-900/50', !isLight);
+            themeToggleBtn.classList.toggle('hover:bg-gray-700/50', !isLight);
+
+            themeIconMoon.classList.toggle('hidden', isLight);
+            themeIconSun.classList.toggle('hidden', !isLight);
+            
+            // 4. Navigation Links
+            navLinks.forEach(link => {
+                 link.classList.toggle('text-gray-400', !isLight);
+                 link.classList.toggle('text-gray-500', isLight);
+                 link.classList.toggle('hover:text-white', !isLight);
+                 link.classList.toggle('hover:text-black', isLight);
+            });
+            
+            // 5. Apply generalized theme classes
+            for (const [cls, colors] of Object.entries(selectors)) {
+                document.querySelectorAll(`.${cls}`).forEach(el => {
+                    colors.dark.forEach(c => el.classList.remove(c));
+                    colors.light.forEach(c => el.classList.remove(c));
+                    
+                    const classesToApply = isLight ? colors.light : colors.dark;
+                    classesToApply.forEach(c => el.classList.add(c));
+                });
+            }
+        }
+        
+        // Expose toggleTheme globally for the button's onclick
+        window.toggleTheme = function() {
+            const currentTheme = body.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+            
+            // Re-apply theme to project modal badges if it's open
+            if (!detailModal.classList.contains('opacity-0')) {
+                 const modalTitle = document.getElementById('modal-title').textContent;
+                 const currentProject = Array.from(projectBoxes).find(b => JSON.parse(b.getAttribute('data-project') || '{}').title === modalTitle);
+                 
+                 if (currentProject) {
+                     try {
+                        const projectData = JSON.parse(currentProject.getAttribute('data-project'));
+                        openDetailModal(projectData); // Reopen to refresh badges
+                    } catch (e) {
+                        console.error('Could not refresh modal data on theme change:', e);
+                    }
+                 }
+            }
+        }
+        
+        // Initial theme setup on load
+        function initTheme() {
+            // 1. Read theme from local storage or default to 'light'
+            const savedTheme = localStorage.getItem('theme') || 'light'; 
+            
+            // Initial application of classes
+            body.setAttribute('data-theme', savedTheme);
+            applyTheme(savedTheme);
+        }
+        
+        // Run initialization
+        initTheme();
+    </script>
+</body>
+</html>
